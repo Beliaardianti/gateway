@@ -97,7 +97,6 @@ const MessageLogs = () => {
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
 
-    // Change page
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
     // Export to Excel
@@ -390,7 +389,7 @@ const MessageLogs = () => {
                                 );
                             }
 
-                            // Tampilkan ellipsis untuk range yang di-skip
+                        
                             if (
                                 pageNumber === 2 ||
                                 pageNumber ===
