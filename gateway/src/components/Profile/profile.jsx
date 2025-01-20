@@ -1,15 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 const Profile = () => {
   const [profileData, setProfileData] = useState({
-    name: '',
-    email: 'enjoymov@rajawalibiru.com',
-    phone: '',
-    currentPassword: '',
-    newPassword: '',
-    verifyPassword: '',
-    role: 'Editor',
+    name: "",
+    email: "",
+    phone: "",
+    currentPassword: "",
+    newPassword: "",
+    verifyPassword: "",
+    role: "",
   });
+
+  useEffect(() => {
+  
+    const email = localStorage.getItem("userEmail") || "User";
+    setProfileData((prevData) => ({ ...prevData, email }));
+
+    
+    const fetchProfile = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/profile");
+        setProfileData((prevData) => ({
+          ...prevData,
+          ...response.data,
+        }));
+      } catch (error) {
+        console.error("Error fetching profile data:", error);
+      }
+    };
+
+    fetchProfile();
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -18,15 +40,15 @@ const Profile = () => {
 
   const handleUpdateProfile = (e) => {
     e.preventDefault();
-    alert('Profile updated successfully!');
+    alert("Profile updated successfully!");
   };
 
   const handleChangePassword = (e) => {
     e.preventDefault();
     if (profileData.newPassword === profileData.verifyPassword) {
-      alert('Password changed successfully!');
+      alert("Password changed successfully!");
     } else {
-      alert('New password and verify password do not match!');
+      alert("New password and verify password do not match!");
     }
   };
 
@@ -39,7 +61,9 @@ const Profile = () => {
         <div>
           <form onSubmit={handleUpdateProfile}>
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Name</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Name
+              </label>
               <input
                 type="text"
                 name="name"
@@ -50,7 +74,9 @@ const Profile = () => {
               />
             </div>
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Email
+              </label>
               <input
                 type="email"
                 name="email"
@@ -59,10 +85,14 @@ const Profile = () => {
                 onChange={handleInputChange}
                 disabled
               />
-              <p className="text-sm text-gray-500 mt-1">Email is used for login.</p>
+              <p className="text-sm text-gray-500 mt-1">
+                Email is used for login.
+              </p>
             </div>
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Phone</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Phone
+              </label>
               <input
                 type="tel"
                 name="phone"
@@ -82,22 +112,11 @@ const Profile = () => {
         </div>
 
         <div>
-          <div className="mb-8">
-            <h2 className="text-lg font-bold mb-4">Profile picture</h2>
-            <div className="flex items-center space-x-4">
-              <div className="w-24 h-24 bg-gray-200 rounded-full flex items-center justify-center">
-                <span className="text-gray-400">Profile</span>
-              </div>
-              <button className="bg-gray-200 text-gray-700 py-2 px-4 rounded hover:bg-gray-300">
-                Edit
-              </button>
-            </div>
-            <p className="text-sm text-gray-500 mt-2">Allowed JPG, PNG or WEBP. Max size of 300K</p>
-          </div>
-
           <form onSubmit={handleChangePassword}>
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Current password</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Current password
+              </label>
               <input
                 type="password"
                 name="currentPassword"
@@ -108,7 +127,9 @@ const Profile = () => {
               />
             </div>
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">New Password</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                New Password
+              </label>
               <input
                 type="password"
                 name="newPassword"
@@ -119,7 +140,9 @@ const Profile = () => {
               />
             </div>
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Verify Password</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Verify Password
+              </label>
               <input
                 type="password"
                 name="verifyPassword"
@@ -136,17 +159,6 @@ const Profile = () => {
               Change password
             </button>
           </form>
-
-          <div className="mt-8">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Role</label>
-            <input
-              type="text"
-              name="role"
-              className="border border-gray-300 rounded w-full p-2"
-              value={profileData.role}
-              disabled
-            />
-          </div>
         </div>
       </div>
     </div>
